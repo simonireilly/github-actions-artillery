@@ -1,9 +1,15 @@
 config:
   target: https://google.com
   phases:
-    - duration: 10
+    - duration: 2
       arrivalRate: 1
       name: "Acceptance Test"
+    - duration: 5
+      arrivalRate: 2
+      name: "Ramp up"
+    - duration: 3
+      arrivalRate: 20
+      name: "Burn out"
 
 scenarios:
   - flow:
