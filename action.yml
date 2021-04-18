@@ -7,8 +7,13 @@ author: kenju
 description: Load test your application with artillery/artillery
 inputs:
   filepath:
+    description: File path, relative to root directory, to the load test yaml
     required: true
     default: ./load-test.yml
+outputs:
+  report:
+    description: A markdown string of the artillery report
+
 runs:
   using: docker
   image: Dockerfile
