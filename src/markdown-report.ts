@@ -1,6 +1,5 @@
 
 export const reportToMarkdown = (report: Artillery.Report): string => {
-  return JSON.stringify(report)
 
   const reportLine = Object.values(report.aggregate.latency).join(` | `)
 
