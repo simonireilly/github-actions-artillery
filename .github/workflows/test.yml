@@ -12,3 +12,8 @@ jobs:
         uses: ./
         with:
           filepath: load-test.yml
+        id: load-test
+      - name: Create commit comment
+        uses: peter-evans/commit-comment@v1
+        with:
+          body: "# Load Test Results ${{ steps.load-test.outputs.report }}"

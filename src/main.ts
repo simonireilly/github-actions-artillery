@@ -1,5 +1,6 @@
-const core = require('@actions/core');
-const artillery = require('artillery');
+import * as core from '@actions/core'
+import * as exec from '@actions/exec'
+import { reportToMarkdown } from './markdown-report';
 const { promises: fs } = require('fs')
 
 async function run() {
@@ -11,7 +12,21 @@ async function run() {
     core.debug('content=')
     core.debug(content)
 
-    artillery.run(filepath, {})
+    await exec.exec(
+      'npx',
+      ['artillery', '--output', 'report.json', 'run', filepath,],
+    )
+  } catch (error) {
+    core.setFailed(error.message);
+  }
+
+  try {
+    const contents = await fs.readFile('report.json', 'utf8')
+    const report: Artillery.Report  = JSON.parse(contents)
+
+    const markdown = reportToMarkdown(report)
+
+    core.setOutput('report', markdown)
   } catch (error) {
     core.setFailed(error.message);
   }
