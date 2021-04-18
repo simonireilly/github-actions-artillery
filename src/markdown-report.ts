@@ -3,7 +3,7 @@ export const reportToMarkdown = (report: Artillery.Report): string => {
 
   const reportLatency = (latency: Artillery.Latency) => Object.values(latency).join(` | `)
   const reportCodes = (entry: Artillery.Aggregate | Artillery.Intermediate): string => {
-    return Object.entries(entry).map(([key, value]) => {
+    return Object.entries(entry.codes).map(([key, value]) => {
       return `| ${key} | ${value} | ${entry.requestsCompleted} | ${100 * value/entry.requestsCompleted} |`
     }).join('\n')
   }
@@ -27,6 +27,14 @@ ${reportCodes(report.aggregate)}
 | min (ms) | max (ms) | median (ms) | p95 (ms) | p99 (ms) |
 | -------- | -------- | ----------- | -------- | -------- |
 | ${reportLatency(report.aggregate.latency)} |
+
+
+**All Stats**
+
+| HTTP Code | Count | Total | Percentage | min (ms) | max (ms) | median (ms) | p95 (ms) | p99 (ms) |
+| --- | --- | --- | --- |  -------- | -------- | ----------- | -------- | -------- |
+${reportCodes(report.aggregate)} | ${reportLatency(report.aggregate.latency)} |
+
 
 ### Intermediates
 
