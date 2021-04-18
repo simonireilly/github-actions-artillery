@@ -17,7 +17,7 @@ export const reportToMarkdown = (report: Artillery.Report): string => {
 *Responses*
 | HTTP Code | Count | Total | Percentage |
 | --- | --- | --- | --- |
-
+${codeLine}
 
 *Latency*
 | Request Count | min (ms) | max (ms) | median (ms) | p95 (ms) | p99 (ms) |
