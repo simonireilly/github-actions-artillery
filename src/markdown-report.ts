@@ -1,10 +1,14 @@
 
 export const reportToMarkdown = (report: Artillery.Report): string => {
 
-  const reportLine = Object.values(report.aggregate.latency).join(` | `)
-  const codeLine = Object.entries(report.aggregate.codes).map(([key, value]) => {
-    return `| ${key} | ${value} | ${report.aggregate.requestsCompleted} | ${100 * value/report.aggregate.requestsCompleted} |`
-  }).join('\n')
+  const reportLatency = (latency: Artillery.Latency) => Object.values(latency).join(` | `)
+  const reportCodes = (entry: Artillery.Aggregate | Artillery.Intermediate): string => {
+    return Object.entries(entry).map(([key, value]) => {
+      return `| ${key} | ${value} | ${entry.requestsCompleted} | ${100 * value/entry.requestsCompleted} |`
+    }).join('\n')
+  }
+
+
 
   return `
 ## Artillery Results 💣
@@ -14,14 +18,21 @@ export const reportToMarkdown = (report: Artillery.Report): string => {
 - Ran ${report.aggregate.requestsCompleted}
 - Requests per seconds: ${report.aggregate.rps.mean} (req/s)
 
-*Responses*
+**Responses**
 | HTTP Code | Count | Total | Percentage |
 | --- | --- | --- | --- |
-${codeLine}
+${reportCodes(report.aggregate)}
 
-*Latency*
-| Request Count | min (ms) | max (ms) | median (ms) | p95 (ms) | p99 (ms) |
-| -------- | -------- | -------- | ----------- | -------- | -------- |
-| ${report.aggregate.requestsCompleted} | ${reportLine} |
+**Latency**
+| min (ms) | max (ms) | median (ms) | p95 (ms) | p99 (ms) |
+| -------- | -------- | ----------- | -------- | -------- |
+| ${reportLatency(report.aggregate.latency)} |
+
+### Intermediates
+
+**Latency**
+| min (ms) | max (ms) | median (ms) | p95 (ms) | p99 (ms) |
+| -------- | -------- | ----------- | -------- | -------- |
+${report.intermediate.map(intermediate => `| ${reportLatency(intermediate.latency)} |`).join(`\n`)}
   `
 }
