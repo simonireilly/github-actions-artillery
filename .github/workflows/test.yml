@@ -1,0 +1,14 @@
+name: "Acceptance test"
+
+on:
+  push:
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test Artillery Build
+        uses: ./
+        with:
+          filepath: load-test.yml
