@@ -3,7 +3,7 @@ export const reportToMarkdown = (report: Artillery.Report): string => {
 
   const reportLine = Object.values(report.aggregate.latency).join(` | `)
   const codeLine = Object.entries(report.aggregate.codes).map(([key, value]) => {
-    return `| ${key} | ${value} | ${report.aggregate.requestsCompleted} | ${value/report.aggregate.requestsCompleted} |`
+    return `| ${key} | ${value} | ${report.aggregate.requestsCompleted} | ${100 * value/report.aggregate.requestsCompleted} |`
   }).join('\n')
 
   return `
